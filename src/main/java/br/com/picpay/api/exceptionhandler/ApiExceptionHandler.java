@@ -43,7 +43,7 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
     public static final String MSG_ERRO_GENERICA_USUARIO_FINAL = "Ocorreu um erro interno no sistema." +
             " Tente novamente e se o problema persistir, entre em contato com o administrador do sistema.";
 
-    @Value("#{'${picpay-desafio.senha.requisitos}'.split(',')}")
+    @Value("#{'${senha.requisitos}'.split(',')}")
     private List<SegurancaSenha.RequisitosSenha> requisitosSenha;
 
     @Override

@@ -28,7 +28,7 @@ public @interface SegurancaSenha {
 
     class SegurancaSenhaValidator implements ConstraintValidator<SegurancaSenha, String> {
 
-        @Value("#{'${picpay-desafio.senha.requisitos}'.split(',')}")
+        @Value("#{'${senha.requisitos}'.split(',')}")
         private List<RequisitosSenha> requisitosParaValidar;
 
         @Override

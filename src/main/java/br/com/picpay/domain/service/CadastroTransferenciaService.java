@@ -1,7 +1,6 @@
 package br.com.picpay.domain.service;
 
 import br.com.picpay.api.model.input.TransferenciaInput;
-import br.com.picpay.domain.enumeration.TipoTransferencia;
 import br.com.picpay.domain.model.Transferencia;
 import br.com.picpay.domain.model.Usuario;
 import br.com.picpay.domain.repository.TransfereciaRepository;
@@ -23,9 +22,8 @@ import static br.com.picpay.util.FormatadorMonetarioUtil.formatarParaMonetario;
 public class CadastroTransferenciaService {
 
     private final CadastroUsuarioService cadastroUsuarioService;
-    private final ValidarUsuarioTipoTransferenciaService validarUsuarioTipoTransferenciaService;
+    private final ValidadorTransferenciaService validadorTransferenciaService;
     private final CalculadorSaldoService calculadorSaldoService;
-    private final ValidarSaldoTransferencia validarSaldoTransferencia;
     private final AutorizadorService autorizadorService;
     private final TransfereciaRepository transfereciaRepository;
 
@@ -40,14 +38,11 @@ public class CadastroTransferenciaService {
         log.info("Cliente {} tem um saldo disponível de R$ {}",
                 usuarioTransferencia.getNomeCompleto(), formatarParaMonetario(saldoUsuarioTransferencia, "pt", "BR"));
 
-        validarUsuarioTipoTransferenciaService.isUsuarioAptoTipoTransferencia(usuarioTransferencia, TipoTransferencia.TRANSFERIR);
-        validarSaldoTransferencia.validarSaldoUsuario(saldoUsuarioTransferencia, transferenciaInput.getValorTransferencia(), usuarioTransferencia.getNomeCompleto());
-        log.info("As validações de isUsuarioAptoTipoTransferencia e validarSaldoUsuario foram relizadas com sucesso.");
+        validadorTransferenciaService.execute(usuarioTransferencia, saldoUsuarioTransferencia, transferenciaInput);
 
         Transferencia transferencia = buildTransferencia(usuarioTransferencia, usuarioRecebimento, transferenciaInput.getValorTransferencia());
 
         autorizadorService.isAutorizado();
-        log.info("Autorização de serviço externo feita com sucesso.");
         transferencia.notificarTransferencia();
 
         transfereciaRepository.save(transferencia);

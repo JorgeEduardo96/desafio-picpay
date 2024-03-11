@@ -4,7 +4,7 @@ VALUES (
     'Fulano Souza',
     '98765432101',
     'fulano@example.com',
-    'senha456!',
+    'fraun456!',
     '2022-03-02T14:30:00Z',
     'COMUM'
 );
@@ -37,7 +37,7 @@ VALUES (
     'Lojista Comércio Ltda',
     '11223344000100',
     'lojista@example.com',
-    'senha123',
+    'fraun123',
     '2022-03-04T09:15:00Z',
     'LOJISTA'
 );
