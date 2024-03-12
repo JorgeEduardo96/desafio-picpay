@@ -58,9 +58,9 @@ VALUES (
     '0d0933b1-9bd6-4ea4-94fc-0b97f0a2c289',
     '550e8400-e29b-41d4-a716-446655440002',
     '550e8400-e29b-41d4-a716-446655440001',
-    100.00,
+    20000.00,
     '2022-03-04T10:30:00Z',
-    TRUE
+    FALSE
 );
 
 INSERT INTO transferencia (id, usuario_transferencia_id, usuario_recebimento_id, valor_transferencia, data_transferencia, notificacao_enviada)
@@ -70,5 +70,5 @@ VALUES (
     '550e8400-e29b-41d4-a716-446655440001',
     50.00,
     '2022-03-04T10:30:00Z',
-    TRUE
+    FALSE
 );

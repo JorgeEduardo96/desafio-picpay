@@ -23,4 +23,6 @@ public interface TransfereciaRepository extends JpaRepository<Transferencia, UUI
     List<Transferencia> findByUsuarioTransferencia(Usuario usuarioTransferencia);
     List<Transferencia> findByUsuarioRecebimento(Usuario usuarioTransferencia);
 
+    List<Transferencia> findByNotificacaoEnviada(boolean notificacaoEnviada);
+
 }

@@ -1,26 +1,27 @@
 package br.com.picpay.service;
 
 
-import br.com.picpay.api.model.dto.UsuarioDto;
 import br.com.picpay.api.model.input.UsuarioInput;
 import br.com.picpay.domain.enumeration.TipoUsuario;
 import br.com.picpay.domain.mapper.UsuarioMapper;
 import br.com.picpay.domain.model.Usuario;
+import br.com.picpay.domain.model.exception.UsuarioNaoEncontradoException;
 import br.com.picpay.domain.repository.UsuarioRepository;
 import br.com.picpay.domain.service.CadastroUsuarioService;
-import br.com.picpay.domain.service.ValidarCpfCnpjUnicoService;
-import br.com.picpay.domain.service.ValidarSenhaUsuarioService;
-import br.com.picpay.domain.service.ValidarEmailUnicoService;
+import br.com.picpay.domain.service.ValidadorCadastroUsuarioService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static java.lang.String.format;
+import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
@@ -34,13 +35,7 @@ public class CadastroUsuarioServiceTest {
     private UsuarioRepository usuarioRepository;
 
     @Mock
-    private ValidarEmailUnicoService validarEmailUnicoService;
-
-    @Mock
-    private ValidarCpfCnpjUnicoService validarCpfCnpjUnicoService;
-
-    @Mock
-    private ValidarSenhaUsuarioService validarSenhaUsuarioService;
+    private ValidadorCadastroUsuarioService validadorCadastroUsuarioService;
 
     @Mock
     private UsuarioMapper usuarioMapper;
@@ -53,9 +48,7 @@ public class CadastroUsuarioServiceTest {
         Usuario usuarioModelResponse = buildUsuarioModel();
         usuarioModelResponse.setId(id);
 
-        doNothing().when(validarEmailUnicoService).isEmailUnique(any());
-        doNothing().when(validarCpfCnpjUnicoService).isCpfCnpjUnique(any());
-        doNothing().when(validarSenhaUsuarioService).isSenhaConfirmacaoEquals(any(), any());
+        doNothing().when(validadorCadastroUsuarioService).execute(any());
         when(usuarioMapper.toModel(input)).thenReturn(usuarioModel);
         when(usuarioRepository.save(usuarioModel)).thenReturn(usuarioModelResponse);
 
@@ -70,11 +63,11 @@ public class CadastroUsuarioServiceTest {
 
     private UsuarioInput buildUsuarioInput() {
         return new UsuarioInput("João Teste",
-                                     "94521162002",
-                                       "joao_teste@hotmail.com",
-                                       "senhaTeste123!;",
-                               "senhaTeste123!;",
-                                              TipoUsuario.COMUM);
+                "94521162002",
+                "joao_teste@hotmail.com",
+                "senhaTeste123!;",
+                "senhaTeste123!;",
+                TipoUsuario.COMUM);
     }
 
     private Usuario buildUsuarioModel() {
@@ -88,20 +81,49 @@ public class CadastroUsuarioServiceTest {
                 .build();
     }
 
-    private UsuarioDto buildUsuarioDto(UUID id) {
-        Usuario usuarioModel = buildUsuarioModel();
-
-        UsuarioDto usuarioDto = UsuarioDto.builder()
-                .email(usuarioModel.getEmail())
-                .tipoUsuario(usuarioModel.getTipoUsuario())
-                .nomeCompleto(usuarioModel.getNomeCompleto())
-                .cpfCnpj(usuarioModel.getCpfCnpj())
+    @Test
+    void testBuscarOuFalhar_UsuarioEncontrado() {
+        UUID usuarioId = UUID.randomUUID();
+        Usuario expectedResult = Usuario.builder()
+                .id(usuarioId)
                 .build();
 
-        if (id != null) usuarioDto.setId(id);
+        when(usuarioRepository.findById(usuarioId)).thenReturn(Optional.of(expectedResult));
 
-        return usuarioDto;
+        Usuario actualResult = cadastroUsuarioService.buscarOuFalhar(usuarioId);
+
+        assertEquals(expectedResult, actualResult);
     }
 
+    @Test
+    void testBuscarOuFalhar_whenUsuarioNaoEncontrado_throwsException() {
+        UUID usuarioId = UUID.randomUUID();
+        when(usuarioRepository.findById(usuarioId)).thenReturn(Optional.empty());
+
+        assertThrows(UsuarioNaoEncontradoException.class, () -> cadastroUsuarioService.buscarOuFalhar(usuarioId));
+
+        assertThatThrownBy(() -> cadastroUsuarioService.buscarOuFalhar(usuarioId))
+                .isInstanceOf(UsuarioNaoEncontradoException.class)
+                .hasMessage(format("Usuário de ID: %s, não existente.", usuarioId));
+    }
+
+    @Test
+    void testGetAll() {
+        UUID usuarioId = UUID.randomUUID();
+        UUID usuarioId2 = UUID.randomUUID();
+        List<Usuario> usuariosMock = List.of(
+                Usuario.builder()
+                        .id(usuarioId)
+                        .build(),
+                Usuario.builder()
+                        .id(usuarioId2)
+                        .build()
+        );
+
+        when(usuarioRepository.findAll()).thenReturn(usuariosMock);
+
+        List<Usuario> resultado = cadastroUsuarioService.getAll();
+        assertEquals(usuariosMock, resultado);
+    }
 
 }

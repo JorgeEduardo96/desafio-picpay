@@ -1,13 +1,11 @@
 package br.com.picpay.domain.model;
 
-import br.com.picpay.domain.event.TransferenciaNotificadaEvent;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
-import org.springframework.data.domain.AbstractAggregateRoot;
 
 import java.math.BigDecimal;
 import java.time.OffsetDateTime;
@@ -18,7 +16,7 @@ import java.util.UUID;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class Transferencia extends AbstractAggregateRoot<Transferencia> {
+public class Transferencia {
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
@@ -38,11 +36,10 @@ public class Transferencia extends AbstractAggregateRoot<Transferencia> {
     @Column(nullable = false, columnDefinition = "datetime")
     private OffsetDateTime dataTransferencia;
 
-    private Boolean notificacaoEnviada = false;
+    private boolean notificacaoEnviada;
 
-    public void notificarTransferencia() {
-        setNotificacaoEnviada(true);
-        registerEvent(new TransferenciaNotificadaEvent(this));
+    public void confirmarNotificacaoTransferencia() {
+        this.notificacaoEnviada = true;
     }
 
 }

@@ -2,11 +2,11 @@ package br.com.picpay.domain.model.exception;
 
 import java.util.UUID;
 
-public class UsuarioNaoEncontradoException extends EntidadeNaoEncontradaException {
+public class TransferenciaNaoEncontradaException extends EntidadeNaoEncontradaException {
 
     private static final long serialVersionUID = 1L;
 
-    public UsuarioNaoEncontradoException(UUID id) {
+    public TransferenciaNaoEncontradaException(UUID id) {
         super(String.format("Usuário de ID: %s, não existente.", id));
     }
 }
