@@ -27,7 +27,7 @@ public class NotificadorService {
 
     private void fallbackSendNotificacaoTransferencia(Transferencia transferencia, Exception ex) {
         log.warn("Notificação da transferência de ID: {} não enviada.", transferencia.getId());
-        log.warn("Maiores detalhes: {}", ex.getMessage());
+        log.error("Maiores detalhes: {}", ex.getMessage());
     }
 
     // a cada 5 minutos procura por transferências sem notificação para serem reprocessadas
@@ -38,7 +38,11 @@ public class NotificadorService {
         log.info("Foram encontrados {} transferências sem notificação, entrando no fluxo de reenvio de notificação!",
                 transferenciasNaoNotificadas.size());
         for(Transferencia transferencia: transferenciasNaoNotificadas) {
-            this.sendNotificacaoTransferencia(transferencia);
+            try {
+                this.sendNotificacaoTransferencia(transferencia);
+            } catch (Exception ex) {
+                log.error(ex.getMessage());
+            }
         }
     }
 

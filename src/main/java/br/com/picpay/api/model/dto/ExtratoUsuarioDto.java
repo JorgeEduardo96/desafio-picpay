@@ -21,5 +21,6 @@ public class ExtratoUsuarioDto {
     private List<TransferenciaExtratoDto> enviadas;
     private BigDecimal totalEnviadas;
     private OffsetDateTime dataExtrato;
+    private String nomeCompleto;
 
 }

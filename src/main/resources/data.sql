@@ -4,7 +4,7 @@ VALUES (
     'Fulano Souza',
     '98765432101',
     'fulano@example.com',
-    'fraun456!',
+    'htcwp456!',
     '2022-03-02T14:30:00Z',
     'COMUM'
 );
@@ -15,7 +15,7 @@ VALUES (
     'Usuário 1',
     '12581161388',
     'usuario1@example.com',
-    'senha789!',
+    'htcwp789!',
     '2022-03-03T10:45:00Z',
     'COMUM'
 );
@@ -26,7 +26,7 @@ VALUES (
     'Usuário 2',
     '21807940373',
     'usuario2@example.com',
-    'senha789!',
+    'htcwp789!',
     '2022-03-03T10:45:00Z',
     'COMUM'
 );
@@ -37,7 +37,7 @@ VALUES (
     'Lojista Comércio Ltda',
     '11223344000100',
     'lojista@example.com',
-    'fraun123',
+    'htcwp123',
     '2022-03-04T09:15:00Z',
     'LOJISTA'
 );
@@ -48,7 +48,7 @@ VALUES (
     'Jorge Eduardo',
     '57106858528',
     'jorge@example.com',
-    'senha789',
+    'htcwp789!',
     '2022-03-04T09:15:00Z',
     'COMUM'
 );

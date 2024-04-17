@@ -20,9 +20,4 @@ public class CriptografiaUtil {
         return resultado.toString();
     }
 
-    public static String descriptografar(String textoCriptografado, int chave) {
-        chave = 26 - chave;
-        return criptografar(textoCriptografado, chave);
-    }
-
 }

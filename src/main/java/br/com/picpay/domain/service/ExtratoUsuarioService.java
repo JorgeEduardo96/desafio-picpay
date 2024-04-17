@@ -56,19 +56,21 @@ public class ExtratoUsuarioService {
             totalTransferencias = transferencias.stream().map(TransferenciaExtratoDto::getValor).reduce(BigDecimal.ZERO, BigDecimal::add);
         }
 
-        return buildExtratoUsuarioDto(transferencias, totalTransferencias, recebimentos, totalRecebimentos);
+        return buildExtratoUsuarioDto(transferencias, totalTransferencias, recebimentos, totalRecebimentos, usuario.getNomeCompleto());
     }
 
     private ExtratoUsuarioDto buildExtratoUsuarioDto(List<TransferenciaExtratoDto> transferencias,
                                                      BigDecimal totalTransferencias,
                                                      List<TransferenciaExtratoDto> recebimentos,
-                                                     BigDecimal totalRecebimentos) {
+                                                     BigDecimal totalRecebimentos,
+                                                     String nomeCompleto) {
         return ExtratoUsuarioDto.builder()
                 .dataExtrato(OffsetDateTime.now())
                 .enviadas(transferencias)
                 .totalEnviadas(totalTransferencias)
                 .recebidas(recebimentos)
                 .totalRecebidas(totalRecebimentos)
+                .nomeCompleto(nomeCompleto)
                 .build();
     }
 

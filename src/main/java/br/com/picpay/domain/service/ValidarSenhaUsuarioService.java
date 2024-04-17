@@ -4,7 +4,7 @@ import br.com.picpay.domain.model.exception.SenhaIncorretaException;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
-import static br.com.picpay.util.CriptografiaUtil.descriptografar;
+import static br.com.picpay.util.CriptografiaUtil.criptografar;
 
 @Service
 public class ValidarSenhaUsuarioService {
@@ -17,7 +17,7 @@ public class ValidarSenhaUsuarioService {
     }
 
     public void isSenhaUsuarioCorreta(String senhaDto, String senhaUsuarioModel) {
-        if (!senhaDto.equalsIgnoreCase(descriptografar(senhaUsuarioModel, chaveCriptografia))) throw new SenhaIncorretaException("Senha digitada não está correta!");
+        if (!criptografar(senhaDto, chaveCriptografia).equalsIgnoreCase(senhaUsuarioModel)) throw new SenhaIncorretaException("Senha digitada não está correta!");
     }
 
 }
